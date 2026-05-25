@@ -2,7 +2,7 @@ asgiref==3.11.1
 certifi==2026.4.22
 customtkinter==5.2.2
 darkdetect==0.8.0
-Django==3.2.25
+Django==5.1.2
 dnspython==2.8.0
 packaging==26.2
 pillow==12.2.0
