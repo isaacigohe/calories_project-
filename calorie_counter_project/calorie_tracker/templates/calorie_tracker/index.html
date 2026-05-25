@@ -1,0 +1,79 @@
+{% extends 'calorie_tracker/base.html' %}
+
+{% block title %}Home - Calorie Counter{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-center text-indigo-600 mb-8">Daily Calorie Tracker</h1>
+
+<!-- Add Food Form -->
+<div class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h2 class="text-xl font-semibold mb-4 text-gray-800">Add New Food Item</h2>
+    <form method="POST" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Food Name</label>
+                <input type="text" name="name" id="name" placeholder="e.g. Apple" required 
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2.5 border">
+            </div>
+            <div>
+                <label for="calories" class="block text-sm font-medium text-gray-700">Calories (kcal)</label>
+                <input type="number" name="calories" id="calories" placeholder="e.g. 95" required 
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2.5 border">
+            </div>
+        </div>
+        <button type="submit" class="w-full bg-indigo-600 text-white py-2.5 px-4 rounded-md hover:bg-indigo-700 transition duration-200 font-semibold shadow-sm">
+            Add to Log
+        </button>
+    </form>
+</div>
+
+<!-- Calorie Summary -->
+<div class="bg-indigo-50 p-6 rounded-lg border border-indigo-100 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="text-center md:text-left">
+        <h2 class="text-lg font-semibold text-indigo-800 uppercase tracking-wider text-xs">Total Consumption</h2>
+        <p class="text-4xl font-extrabold text-indigo-600">{{ total_calories }} <span class="text-lg font-normal">kcal</span></p>
+    </div>
+    <a href="{% url 'reset_calories' %}" onclick="return confirm('Are you sure you want to reset all data for today?')" 
+       class="bg-white text-red-600 border border-red-200 py-2 px-6 rounded-md hover:bg-red-50 transition duration-200 font-medium shadow-sm">
+        Reset Day
+    </a>
+</div>
+
+<!-- Food List -->
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="px-6 py-4 border-b bg-gray-50 flex justify-between items-center">
+        <h2 class="text-lg font-bold text-gray-800">Today's Food Log</h2>
+        <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+            {{ food_items|length }} items
+        </span>
+    </div>
+    <ul class="divide-y divide-gray-200">
+        {% for item in food_items %}
+        <li class="px-6 py-4 flex justify-between items-center hover:bg-gray-50 transition duration-150">
+            <div>
+                <p class="font-bold text-gray-900">{{ item.name }}</p>
+                <p class="text-sm text-gray-500">{{ item.created_at|date:"P" }}</p>
+            </div>
+            <div class="flex items-center gap-6">
+                <span class="text-lg font-semibold text-gray-700">{{ item.calories }} kcal</span>
+                <a href="{% url 'delete_food' item.id %}" class="text-red-500 hover:text-red-700 font-medium text-sm p-2 hover:bg-red-50 rounded-full transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        </li>
+        {% empty %}
+        <li class="px-6 py-12 text-center">
+            <div class="text-gray-400 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+            </div>
+            <p class="text-gray-500 italic">Your log is empty. Start adding what you eat!</p>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
