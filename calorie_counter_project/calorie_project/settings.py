@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,15 +77,13 @@ WSGI_APPLICATION = 'calorie_project.wsgi.application'
 
 #
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'calorie_db',
-        'USER': 'calorie_user',
-        'PASSWORD': 'calorie_pass',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.parse("postgresql://my_db_n2g1_user:TomoIsvU4YXCSXTclainWNtoP71UIEhe@dpg-d8a0tlj7uimc739vnqo0-a.oregon-postgres.render.com/my_db_n2g1")
+    
 }
+
+
+
+
 
 
 # Password validation
